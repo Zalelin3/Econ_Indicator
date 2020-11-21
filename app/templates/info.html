@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block body %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/" target="_blank" rel="noopener noreferrer">Econ Indicator</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#information">Technical Info</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br>
+    <br>
+    <div class="container" id=information">
+        <div id="economy" align="center">
+            <h3><strong>Abbreviation Table for Economies</strong>
+                <button type="button" class="btn btn-success btn-sm" onclick="show_hide('#t1','#economy button')">show</button></h3>
+            <div class="table-responsive pre-scrollable">
+                <table class="table-hover table-striped" id="t1" align="center" style="display: none;">
+                    <thead >
+                        <tr>
+                            <th>&nbsp;&nbsp;Economy&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;Code&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;ISA's Code&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;Is Group&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;Is Region&nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for econ in econs %}
+                            <tr>
+                                <th>{{econ.ename}}</th>
+                                <th>{{econ.ecode}}</th>
+                                <th>
+                                    {% if econ.iso3a %}
+                                        {{econ.iso3a}}
+                                    {% endif %}
+                                </th>
+                                <th>
+                                    {% if econ.is_group %}
+                                        <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                                        </svg>
+                                    {% endif %}
+                                </th>
+                                <th>
+                                    {% if econ.is_group %}
+                                        <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                                        </svg>
+                                    {% endif %}
+                                </th>
+                            </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="indicator" align="center">
+            <h3><strong>Abbreviation Table for Indicator</strong>
+                <button type="button" class="btn btn-success btn-sm" onclick="show_hide('#t2','#indicator button')">show</button></h3>
+            <div class="table-responsive pre-scrollable">
+                <table class="table-hover table-striped" id="t2" align="center" style="display: none;">
+                    <thead >
+                        <tr>
+                            <th>Category</th>
+                            <th>Indicator</th>
+                            <th>Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in indicators %}
+                            <tr>
+                                <th>{{i.category}}</th>
+                                <th>{{i.indicator}}</th>
+                                <th>{{i.icode}}</th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="category" align="center">
+            <h3><strong>Abbreviation Table for Category</strong>
+                <button type="button" class="btn btn-success btn-sm" value="0" onclick="show_hide('#t3','#category button')">show</button></h3>
+            <div class="table-responsive pre-scrollable">
+                <table class="table-hover table-striped" id="t3" align="center" style="display: none;">
+                    <thead >
+                        <tr>
+                            <th>Product</th>
+                            <th>Product's Code</th>
+                            <th>Classification</th>
+                            <th>Classification's Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                            <tr>
+                                <th>{{p.product}}</th>
+                                <th>{{p.pcode}}</th>
+                                <th>{{p.classification}}</th>
+                                <th>{{p.classification_code}}</th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <br>
+    <br>
+    <script type="text/javascript">
+        function show_hide(selector, button){
+            if ($(button).text()=="show"){
+                $(button).text("hide");
+                $(selector).show();
+            } else{
+                $(button).text("show");
+                $(selector).hide();
+            };
+        };
+    </script>
+
+{% endblock %}

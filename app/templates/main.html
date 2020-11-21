@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Econ Indicator</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#filter">Filter Bar</a></li>
+            <li><a href="#result">Result</a></li>
+            <li><a href="/info" target="_blank" rel="noopener noreferrer">Technical Info</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br id="filter">
+    <br>
+    <section>
+      <div class="s010">
+<!--        <form action= "{{ url_for('main.hello')}}" method="POST" enctype="multipart/form-data">-->
+        <form>
+          <div class="inner-form">
+            <div class="basic-search">
+              <div class="input-field">
+                <input id="search1" type="text" name="search_bar" placeholder="Type Keywords; separate by ';'" />
+                <div class="icon-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="advance-search">
+              <span class="desc">ADVANCED SEARCH</span>
+              <div class="row" id="first_row">
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="r_filter">Types of Reporting Economies</label>
+                    <select data-trigger="", id="r_filter">
+                      <option placeholder="" value="-1">All</option>
+                      <option value="0">Single Economies</option>
+                      <option value="1">Group Economies</option>
+                      <option value="2">Region Economies</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="rid">Reporting Economy</label>
+                    <select data-trigger="" name="rid" id="rid" >
+                      <option placeholder="" value="-1">None</option>
+                      {% for econ in econs %}
+                        <option value={{econ.ecode}}>{{econ.ename}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="pid">Partner Economy</label>
+                    <select data-trigger="" name="pid" id="pid">
+                      <option placeholder="" value="-1">None</option>
+                      {% for econ in econs %}
+                        <option value={{econ.ecode}}>{{econ.ename}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <hr>
+
+              <div class="row second">
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="icode">Indicator</label>
+                    <select data-trigger="" name="icode" id="icode">
+                      <option placeholder="" value="-1">None </option>
+                      <option value="ITS_CS_AM5">Commercial services imports by sector - annual (1980-2013)</option>
+                      <option value="ITS_CS_AM6">Commercial services imports by sector and partner - annual (2005-2019)</option>
+                      <option value="ITS_CS_AX5">Commercial services exports by sector - annual (1980-2013)</option>
+                      <option value="ITS_CS_AX6">Commercial services exports by sector and partner - annual (2005-2019)</option>
+                      <option value="ITS_MTV_AM">Merchandise imports by product group - annual</option>
+                      <option value="ITS_MTV_AX">Merchandise exports by product group - annual</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="procode">Category</label>
+                    <select data-trigger="" name="proid" id = "procode">
+                      <option placeholder="" value="-1">None</option>
+                      {% for prod in prods %}
+                        <option value={{prod.pcode}}>{{prod.product}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="syear">Start Year</label>
+                    <select data-trigger="" name="startyid" id="syear">
+                      <option placeholder="" value="-1">None </option>
+                      {% for i in range(start, end+1) %}
+                        <option value={{i}}>{{i}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="input-field">
+                  <div class="input-select">
+                    <label for="eyear">End Year</label>
+                    <select data-trigger="" name="endyid" id="eyear">
+                      <option placeholder="" value="-1">None</option>
+                      {% for i in range(end, start-1,-1) %}
+                        <option value={{i}}>{{i}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <hr>
+              <div class="row third">
+                <div class="input-field">
+                  <div class="result-count">
+                    <span id="num_of_search_result">0</span>results</div>
+                  <div class="group-btn">
+                    <button class="btn-delete" id="delete">RESET</button>
+                    <button class="btn-search" id="search_result">SEARCH</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <div class="container" id="result">
+        <h1 class="text-center"><strong>RESULT</strong></h1>
+        <div class="container">
+            <div class="row" id="graph"></div>
+        </div>
+        <p class="row" id="result_table"></p>
+        <div class="table-responsive pre-scrollable" id="data_table" style="display: none;">
+            <table class="table-hover table-striped table-bordered" align="center" >
+                <thead >
+                    <tr>
+                        <th>Indicator:</th>
+                        <th colspan="3" id="table_indicator"></th>
+                    </tr>
+                    <tr>
+                        <th>Reporting Economy:</th>
+                        <th colspan="3" id="table_reporter"></th>
+                    </tr>
+                    <tr>
+                        <th>Partner Economy:</th>
+                        <th colspan="3" id="table_partner"></th>
+                    </tr>
+                    <tr>
+                        <th>Category:</th>
+                        <th colspan="3" id="table_category"></th>
+                    </tr>
+                    <tr>
+                        <th>Year</th>
+                        <th>Value<br><small> (Million US dollar)</small></th>
+                        <th>Percentage<br><small>(over the given field)</small></th>
+                        <th>Growth Rate<br><small>(related to last year)</small></th>
+                    </tr>
+                </thead>
+                <tbody id="table_content">
+                  </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <script src="{{url_for('static',filename='js/extention/choices.js')}}"></script>
+<!--    <script src="js/extention/choices.js"></script>-->
+<!--     Controller for the filter bar    -->
+    <script type="text/javascript">
+      const customSelects = document.querySelectorAll("select");
+      const deleteBtn = document.getElementById('delete');
+      const choices = new Choices('select',
+      {
+        searchEnabled: false,
+        shouldSort:false,
+        itemSelectText: '',
+        removeItemButton: true,
+      });
+      for (let i = 0; i < customSelects.length; i++)
+      {
+        customSelects[i].addEventListener('addItem', function(event)
+        {
+          if (event.detail.value)
+          {
+            let parent = this.parentNode.parentNode
+            parent.classList.add('valid')
+            parent.classList.remove('invalid')
+          }
+          else
+          {
+            let parent = this.parentNode.parentNode
+            parent.classList.add('invalid')
+            parent.classList.remove('valid')
+          }
+        }, false);
+      }
+      deleteBtn.addEventListener("click", function(e)
+      {
+        e.preventDefault()
+        const deleteAll = document.querySelectorAll('.choices__button')
+        for (let i = 0; i < deleteAll.length; i++)
+        {
+          deleteAll[i].click();
+        }
+        document.getElementById("num_of_search_result").innerHTML=0;
+      });
+
+      // Filter reporting economy by filter condition and the selection of partner Economy
+      var filter = -1;
+      var partner1 = -1;
+      $("#first_row .input-field:nth-child(2) .choices").click(function(){
+        let filter_value = document.getElementById('r_filter').value;
+        let pid_value = document.getElementById('pid').value;
+        if (filter == filter_value && partner1 == pid_value){
+        }   else if (filter_value == -1 && pid_value == -1){
+                filter = filter_value;
+                partner1 = pid_value;
+                $('#first_row .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        }   else {
+                filter = filter_value;
+                partner1 = pid_value;
+                $('#first_row .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+                $.getJSON('/filterReporting/'+filter_value+'/'+pid_value,function(data){
+                    $.each(data,function(i,key){
+                        let temp = "#first_row .input-field:nth-child(2) .choices__list--dropdown div div[data-value='"+key+"']";
+                        $(temp).css('display','');
+                    });
+                });
+        }
+      });
+
+      // Filter the Partner Economy By reporting economy
+      var reporter1 = -1;
+      $("#first_row .input-field:nth-child(3) .choices").click(function(){
+        let rid_value = document.getElementById('rid').value;
+        if (rid_value== reporter1){
+        }   else if (rid_value == -1){
+            reporter1 = rid_value;
+            $('#first_row .input-field:nth-child(3) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        }   else {
+            reporter1 = rid_value;
+            $('#first_row .input-field:nth-child(3) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+            $.getJSON('/filterPartner/'+rid_value,function(data){
+                $.each(data,function(i,key){
+                    let temp = "#first_row .input-field:nth-child(3) .choices__list--dropdown div div[data-value='"+key+"']";
+                    $(temp).css('display','');
+                });
+            });
+        }
+      });
+
+      // Filter the Indicator by the Reporter Economy and Partner Economy
+      var reporter2 = -1;
+      var partner2 = -1;
+      $(".second .input-field:nth-child(1) .choices").click(function(){
+        let rid_value = document.getElementById('rid').value;
+        let pid_value = document.getElementById('pid').value;
+
+        if (reporter2 == rid_value && partner2 == pid_value){
+        } else if (rid_value == -1 || pid_value == -1){
+           reporter2 = rid_value;
+           partner2 = pid_value;
+           $('.second .input-field:nth-child(1) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        } else {
+           reporter2 = rid_value;
+           partner2 = pid_value;
+           $('.second .input-field:nth-child(1) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+           $.getJSON('/filterIndicator/'+rid_value+'/'+pid_value,function(data){
+            $.each(data,function(i,key){
+                let temp = ".second .input-field:nth-child(1) .choices__list--dropdown div div[data-value='"+key+"']";
+                $(temp).css('display','');
+            });
+           });
+        }
+      });
+
+      // Filter the Category by the Indicator
+      var reporter3 = -1;
+      var partner3 = -1;
+      var indicator = -1;
+      $(".second .input-field:nth-child(2) .choices").click(function(){
+
+        let rid_value = document.getElementById('rid').value;
+        let pid_value = document.getElementById('pid').value;
+        let i_value = document.getElementById('icode').value;
+
+        if (reporter3 == rid_value && partner3 == pid_value && indicator == i_value){
+        } else if (i_value == -1 || rid_value == -1 || pid_value == -1){
+           reporter3 = rid_value;
+           partner3 = pid_value;
+           indicator = i_value;
+           $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        } else {
+           reporter3 = rid_value;
+           partner3 = pid_value;
+           indicator = i_value;
+           $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+           $.getJSON('/filterCategory/'+rid_value+'/'+pid_value+'/'+i_value,function(data){
+            $.each(data,function(i,key){
+                var temp = ".second .input-field:nth-child(2) .choices__list--dropdown div div[data-value='"+key+"']";
+                $(temp).css('display','');
+            });
+           });
+        }
+      });
+
+      // Filter Time Range
+      $("#syear, #eyear").change(function(){
+        let start_year = document.getElementById('syear').value;
+        let end_year = document.getElementById('eyear').value;
+        if (start_year == -1){
+            start_year = 1949;
+        };
+        if (end_year == -1){
+            end_year = 2019;
+        };
+
+        $('.second .input-field:nth-child(3) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+        $('.second .input-field:nth-child(4) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+        for (let i=start_year; i<=end_year; i++){
+            let temp = ".second .input-field:nth-child(3) .choices__list--dropdown div div[data-value='"+i+"']";
+            $(temp).css('display','');
+        }
+        for (let i=end_year; i>=start_year; i--){
+            let temp = ".second .input-field:nth-child(4) .choices__list--dropdown div div[data-value='"+i+"']";
+            $(temp).css('display','');
+        }
+      });
+
+      // Search the Result
+      const search_result = document.getElementById("search_result")
+      search_result.addEventListener("click", function(e)
+      {
+        e.preventDefault();
+
+
+        $('#table_content').empty();
+        var x = document.getElementById('rid');
+
+        $.post('/search',
+            {'text':document.getElementById('search1').value,
+            'rid':document.getElementById('rid').value,
+            'pid':document.getElementById('pid').value,
+            'icode':document.getElementById('icode').value,
+            'procode':document.getElementById('procode').value,
+            'syear':document.getElementById('syear').value,
+            'eyear':document.getElementById('eyear').value},
+            function(data){
+                document.getElementById("num_of_search_result").innerHTML=data.num;
+                if (data.error != 0){
+                    alert(data.error);
+                };
+                if (data.num != 0){
+                    document.getElementById('data_table').style.display="";
+                    document.getElementById("table_indicator").innerHTML=data.indicator;
+                    document.getElementById("table_reporter").innerHTML=data.reporter;
+                    document.getElementById("table_partner").innerHTML=data.partner;
+                    // document.getElementById("table_category").innerHTML=data.category;
+                    $("#table_category").text(data.category);
+                    $.each(data.rows,function(i,row){
+                        let temp = document.createElement("tr");
+                        let y = document.createElement("th");
+                        y.innerHTML = row.year;
+                        temp.appendChild(y);
+                        let t_value = document.createElement("td");
+                        t_value.innerHTML = row.tradevalue;
+                        temp.appendChild(t_value);
+                        let percent = document.createElement("td");
+                        percent.innerHTML = row.percentage;
+                        temp.appendChild(percent);
+                        let growth = document.createElement("td");
+                        growth.innerHTML = row.growthrate;
+                        temp.appendChild(growth);
+                        document.getElementById('table_content').appendChild(temp);
+                    });
+                } else {
+                    document.getElementById('data_table').style.display="none";
+                };
+            },
+        "json");
+      });
+    </script>
+{% endblock %}
