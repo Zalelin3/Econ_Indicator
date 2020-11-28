@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Econ Indicator</a>
+          <a class="navbar-brand" href="/">International Trade Indicator</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
@@ -56,7 +56,7 @@
                     <label for="rid">Reporting Economy</label>
                     <select data-trigger="" name="rid" id="rid" >
                       <option placeholder="" value="-1">None</option>
-                      {% for econ in econs %}
+                      {% for econ in report_econs %}
                         <option value={{econ.ecode}}>{{econ.ename}}</option>
                       {% endfor %}
                     </select>
@@ -67,7 +67,7 @@
                     <label for="pid">Partner Economy</label>
                     <select data-trigger="" name="pid" id="pid">
                       <option placeholder="" value="-1">None</option>
-                      {% for econ in econs %}
+                      {% for econ in partner_econs %}
                         <option value={{econ.ecode}}>{{econ.ename}}</option>
                       {% endfor %}
                     </select>
@@ -171,7 +171,7 @@
                     <tr>
                         <th>Year</th>
                         <th>Value<br><small> (Million US dollar)</small></th>
-                        <th>Percentage<br><small>(over the given field)</small></th>
+                        <th>Percentage<br><small>(over gross volume)</small></th>
                         <th>Growth Rate<br><small>(related to last year)</small></th>
                     </tr>
                 </thead>
@@ -223,18 +223,18 @@
           deleteAll[i].click();
         }
         document.getElementById("num_of_search_result").innerHTML=0;
+        document.getElementById('search1').value = '';
+        // hide all options for indicator
+        $('.second .input-field:nth-child(1) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
+        // hide all category
+        $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
       });
 
       // Filter reporting economy by filter condition and the selection of partner Economy
-      var filter = -1;
-      var partner1 = -1;
       $("#first_row .input-field:nth-child(2) .choices").click(function(){
         let filter_value = document.getElementById('r_filter').value;
         let pid_value = document.getElementById('pid').value;
-        if (filter == filter_value && partner1 == pid_value){
-        }   else if (filter_value == -1 && pid_value == -1){
-                filter = filter_value;
-                partner1 = pid_value;
+        if (filter_value == -1 && pid_value == -1){
                 $('#first_row .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
         }   else {
                 filter = filter_value;
@@ -250,12 +250,10 @@
       });
 
       // Filter the Partner Economy By reporting economy
-      var reporter1 = -1;
+
       $("#first_row .input-field:nth-child(3) .choices").click(function(){
         let rid_value = document.getElementById('rid').value;
-        if (rid_value== reporter1){
-        }   else if (rid_value == -1){
-            reporter1 = rid_value;
+        if (rid_value == -1){
             $('#first_row .input-field:nth-child(3) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
         }   else {
             reporter1 = rid_value;
@@ -270,17 +268,13 @@
       });
 
       // Filter the Indicator by the Reporter Economy and Partner Economy
-      var reporter2 = -1;
-      var partner2 = -1;
+
       $(".second .input-field:nth-child(1) .choices").click(function(){
         let rid_value = document.getElementById('rid').value;
         let pid_value = document.getElementById('pid').value;
 
-        if (reporter2 == rid_value && partner2 == pid_value){
-        } else if (rid_value == -1 || pid_value == -1){
-           reporter2 = rid_value;
-           partner2 = pid_value;
-           $('.second .input-field:nth-child(1) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        if (rid_value == -1 || pid_value == -1){
+           $('.second .input-field:nth-child(1) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
         } else {
            reporter2 = rid_value;
            partner2 = pid_value;
@@ -295,25 +289,16 @@
       });
 
       // Filter the Category by the Indicator
-      var reporter3 = -1;
-      var partner3 = -1;
-      var indicator = -1;
+
       $(".second .input-field:nth-child(2) .choices").click(function(){
 
         let rid_value = document.getElementById('rid').value;
         let pid_value = document.getElementById('pid').value;
         let i_value = document.getElementById('icode').value;
 
-        if (reporter3 == rid_value && partner3 == pid_value && indicator == i_value){
-        } else if (i_value == -1 || rid_value == -1 || pid_value == -1){
-           reporter3 = rid_value;
-           partner3 = pid_value;
-           indicator = i_value;
-           $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','');
+        if (i_value == -1 || rid_value == -1 || pid_value == -1){
+           $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
         } else {
-           reporter3 = rid_value;
-           partner3 = pid_value;
-           indicator = i_value;
            $('.second .input-field:nth-child(2) .choices__list--dropdown div div:not(.choices__placeholder)').css('display','none');
            $.getJSON('/filterCategory/'+rid_value+'/'+pid_value+'/'+i_value,function(data){
             $.each(data,function(i,key){

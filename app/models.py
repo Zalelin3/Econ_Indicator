@@ -45,6 +45,8 @@ class Economies(db.Model):
     iso3a = db.Column(db.String(6), default=None)
     is_group = db.Column(db.Boolean, nullable=False)
     is_region = db.Column(db.Boolean, nullable=False)
+    is_reporter = db.Column(db.Boolean, nullable=False)
+    is_partner = db.Column(db.Boolean, nullable=False)
 
 class Indicators(db.Model):
 

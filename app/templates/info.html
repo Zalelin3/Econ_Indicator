@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/" target="_blank" rel="noopener noreferrer">Econ Indicator</a>
+          <a class="navbar-brand" href="/" target="_blank" rel="noopener noreferrer">International Trade Indicator</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
@@ -20,9 +20,50 @@
     </nav>
     <br>
     <br>
-    <div class="container" id=information">
+    <div class="container">
+        <h3>How to use:</h3>
+        <dl>
+            <dt>Search through text bar</dt>
+            <dd>To obtain the trade data, you should provide at least either the <strong>name</strong>, the <strong>code</strong>,
+                or the <strong>ISO3A's Code</strong> of <strong>two economies</strong>, the <strong>indicator's code</strong>,
+                and the <strong>category's code</strong> on the text bar. Additionally, you can type down two numbers or
+                make selection on two year's button on the advance search section to enforce time constraint.<br>
+                <ul>
+                    <li>Inputs are separated by semicolon.</li>
+                    <li>The first input Economic will be considered as the reporting economy.</li>
+                    <li>The order of the inputs does not matter.</li>
+                    <li>The text is case-insensitive.</li>
+                    <li>If there is no restriction on time, all possible results on the entire time range will be return.</li>
+                    <li>If only one time input is provided, it will be considered as the start year and return all possible values after that.</li>
+                </ul>
+            </dd>
+            <dt>Search through advance search</dt>
+            <dd>
+                <ul>
+                    <li>Selecting one of the options in <strong>Types of Reporting Economies</strong> or <strong>Partner Economy</strong>
+                        will update the options for Reporting Economy automatically.</li>
+                    <li>Selecting one of the options in <strong>Reporting Economies</strong>
+                        will update the options for Partner Economy automatically.</li>
+                    <li>Once Reporting Economy and Partner Economy are not none, all possible indicators will be presented.</li>
+                    <li>If Reporting Economy, Partner Economy, and Indicator are not none, all possible categories will be presented.</li>
+                </ul>
+            </dd>
+<!--            <dt>Search through both</dt>-->
+<!--            <dd>-->
+<!--                The rules are similar to previous two methods.-->
+<!--                <ul>-->
+<!--                    <li>If both sections contain values for specific attribute, the value in the text bar has a higher-->
+<!--                    order priority.</li>-->
+<!--                </ul>-->
+<!--            </dd>-->
+        </dl>
+
+    </div>
+    <br>
+    <br>
+    <div class="container" id="information">
         <div id="economy" align="center">
-            <h3><strong>Abbreviation Table for Economies</strong>
+            <h3><strong>Referential Table for Economies</strong>
                 <button type="button" class="btn btn-success btn-sm" onclick="show_hide('#t1','#economy button')">show</button></h3>
             <div class="table-responsive pre-scrollable">
                 <table class="table-hover table-striped" id="t1" align="center" style="display: none;">
@@ -30,9 +71,11 @@
                         <tr>
                             <th>&nbsp;&nbsp;Economy&nbsp;&nbsp;</th>
                             <th>&nbsp;&nbsp;Code&nbsp;&nbsp;</th>
-                            <th>&nbsp;&nbsp;ISA's Code&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;ISO3A's Code&nbsp;&nbsp;</th>
                             <th>&nbsp;&nbsp;Is Group&nbsp;&nbsp;</th>
                             <th>&nbsp;&nbsp;Is Region&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;Is Reporting Economy&nbsp;&nbsp;</th>
+                            <th>&nbsp;&nbsp;Is Partner Economy&nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,7 +96,21 @@
                                     {% endif %}
                                 </th>
                                 <th>
-                                    {% if econ.is_group %}
+                                    {% if econ.is_region %}
+                                        <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                                        </svg>
+                                    {% endif %}
+                                </th>
+                                <th>
+                                    {% if econ.is_reporter %}
+                                        <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                                        </svg>
+                                    {% endif %}
+                                </th>
+                                <th>
+                                    {% if econ.is_partner %}
                                         <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
                                         </svg>
@@ -66,7 +123,7 @@
             </div>
         </div>
         <div id="indicator" align="center">
-            <h3><strong>Abbreviation Table for Indicator</strong>
+            <h3><strong>Referential Table for Indicator</strong>
                 <button type="button" class="btn btn-success btn-sm" onclick="show_hide('#t2','#indicator button')">show</button></h3>
             <div class="table-responsive pre-scrollable">
                 <table class="table-hover table-striped" id="t2" align="center" style="display: none;">
@@ -90,7 +147,7 @@
             </div>
         </div>
         <div id="category" align="center">
-            <h3><strong>Abbreviation Table for Category</strong>
+            <h3><strong>Referential Table for Category</strong>
                 <button type="button" class="btn btn-success btn-sm" value="0" onclick="show_hide('#t3','#category button')">show</button></h3>
             <div class="table-responsive pre-scrollable">
                 <table class="table-hover table-striped" id="t3" align="center" style="display: none;">

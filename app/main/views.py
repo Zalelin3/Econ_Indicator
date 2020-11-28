@@ -13,7 +13,8 @@ def hello():
 
     :return: Initialize the search dashboard page
     """
-    econs = Economies.query.order_by(Economies.ename).all()
+    report_econs = Economies.query.filter_by(is_reporter=1).order_by(Economies.ename).all()
+    partner_econs = Economies.query.filter_by(is_partner=1).order_by(Economies.ename).all()
     prods = Products.query.order_by(Products.product).all()
     years = """
             select min(year) as start, max(year) as end from trade;
@@ -21,8 +22,9 @@ def hello():
     year = db.session.execute(years).first()
     start = year.start
     end = year.end
-    return render_template('main.html', title="Economic Trade Indicator",
-                           econs=econs, prods=prods, start=start, end=end)
+    return render_template('main.html', title="International Trade Indicator",
+                           report_econs=report_econs, partner_econs=partner_econs,
+                           prods=prods, start=start, end=end)
 
 
 @main.route('/info')
@@ -34,7 +36,7 @@ def info():
     econs = Economies.query.order_by(Economies.ename).all()
     indicators = Indicators.query.order_by(Indicators.category, Indicators.indicator).all()
     products = Products.query.order_by(Products.classification_code, Products.pcode).all()
-    return render_template('info.html', title="Technical Sheet", econs=econs,
+    return render_template('info.html', title="Reference Sheet", econs=econs,
                            indicators=indicators, products=products)
 
 
