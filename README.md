@@ -26,3 +26,47 @@ To obtain the trade data, you should provide at least either the **name**, the *
 * Selecting one of the options in Reporting Economies will update the options for Partner Economy automatically.
 * Once Reporting Economy and Partner Economy are not none, all possible indicators will be presented.
 * If Reporting Economy, Partner Economy, and Indicator are not none, all possible categories will be presented.
+
+## Components
+
+* Frontend: `Bootstrap`,`HTML`,`CSS`,`JS`,`AJAX`
+* Backend: `FLASK`,`PYTHON`
+* Database: `MySQL`
+* Data Processor: `Apache Spark`
+* Data Source: https://www.wto.org/english/res_e/statis_e/trade_datasets_e.htm
+
+## How to set up
+
+* Set up virtual environment
+
+* Git clone to the directory
+
+* pip3 install -r requirements.txt
+
+* Open mysql workbench
+  ```
+  > mysql -u root -p
+  > CREATE USER 'econ'@'localhost' IDENTIFIED BY 'econ';
+  > CREATE DATABASE trade_db;
+  > GRANT ALL PRIVILEGES ON trade_db . * TO 'econ'@'localhost';
+  ```
+* Install and set up Apache Spark
+
+* Load the CSV files from WTO to MySQL
+  Open terminal
+  ```
+  > spark-submit spark_transformer.py
+  ```
+* Run the application on development mode
+  OS:
+  ```
+  > export FLASK_CONFIG=development
+  > export FLASK_APP=run.py
+  > flask run
+  ```
+  Windows:
+  ```
+  > set FLASK_CONFIG=development
+  > set FLASK_APP=run.py
+  > flask run
+  ```
