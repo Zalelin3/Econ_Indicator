@@ -53,11 +53,13 @@ To obtain the trade data, you should provide at least either the **name**, the *
 * Install and set up Apache Spark
 
 * Load the CSV files from WTO to MySQL
+
   Open terminal
   ```
   > spark-submit spark_transformer.py
   ```
 * Run the application on development mode
+
   OS:
   ```
   > export FLASK_CONFIG=development
